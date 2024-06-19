@@ -17,8 +17,10 @@ public class P_Movement : MonoBehaviour
     #region Collision_check
     [Header(" Collision checks")]
     [SerializeField] private Transform ground_check;
-    [SerializeField] private LayerMask ground_mask;
-    private bool grounded() { return Physics2D.OverlapCircle(ground_check.position, 0.2f, ground_mask); }
+    [SerializeField] private Transform wall_check;
+    [SerializeField] private LayerMask solid_mask;
+    private bool grounded() { return Physics2D.OverlapCircle(ground_check.position, 0.2f, solid_mask); }
+    private bool walled() { return Physics2D.OverlapCircle(wall_check.position, 0.2f, solid_mask) && !grounded(); }
     #endregion
 
     #region Ressources
@@ -36,7 +38,8 @@ public class P_Movement : MonoBehaviour
     }
     #endregion
 
-    #region Direction
+    #region Input
+
     private Vector2 _direction;
     private bool _glide_input;
     
@@ -59,29 +62,36 @@ public class P_Movement : MonoBehaviour
             _velocity.x = Mathf.MoveTowards(_body.velocity.x, _direction.x * _data.max_speed, acceleration * Time.fixedDeltaTime);
         }
         _body.velocity = new Vector2(_velocity.x, _body.velocity.y);
+        if(_direction.x != 0) { _body.transform.localScale = new Vector3(_direction.x, 1, 1); }
     }
     #endregion
 
     #region Jump
     public void Jump(InputAction.CallbackContext _jump)
     {
-        if (_jump.performed && grounded() || _jump.performed && _kabu > 0) 
+        if (_jump.performed && grounded() && !walled() || _jump.performed && _kabu > 0 && !walled()) 
         {
             if (!grounded()) { _kabu--; }
             _body.velocity = new Vector2(_body.velocity.x, 0);
             _body.AddForce(Vector2.up * _data.jump_force, ForceMode2D.Impulse); 
+        } 
+        else if(_jump.performed && walled() && _stamina != 0) 
+        {
+            _body.velocity = new Vector2(_body.velocity.x, 0);
+            _body.AddForce(new Vector2(-_direction.x * _data.jump_force/2, _data.jump_force), ForceMode2D.Impulse);
+            _stamina -= _data.stamina_wj_loss;
         }
         if(_body.velocity.y > 0 && _jump.canceled) { _body.gravityScale = _data.base_gravity * _data.low_jump_gravity_multiplier; }
     }
     #endregion
 
     #region Fall & Glide
-    [SerializeField] private bool _gliding;
+    private bool _gliding;
 
     public void Fall()
     {
-        _gliding = _glide_input && !grounded() && _stamina != 0;
-        var max_fall_speed = _gliding? _data.glide_max_fall_speed : _data.max_fall_speed;
+        _gliding = _glide_input && !grounded() && _stamina != 0 && !walled();
+        var max_fall_speed = _gliding || walled() && _direction.x != 0? _data.glide_max_fall_speed : _data.max_fall_speed;
         if(_body.velocity.y <= 0) { _body.gravityScale = _data.base_gravity * _data.fall_gravity_multiplier; }
         _body.velocity = new Vector2(_body.velocity.x, Mathf.Max(_body.velocity.y, -max_fall_speed));
         if (_gliding) { _stamina -= _data.stamina_loss; }

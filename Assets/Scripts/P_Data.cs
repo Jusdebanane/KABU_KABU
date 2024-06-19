@@ -7,6 +7,7 @@ public class P_Data : MonoBehaviour
     [Header("STAMINA")]
     public float max_stamina;
     public float stamina_loss;
+    public float stamina_wj_loss;
     public float stamina_gain;
 
     [Header("GRAVITY")]
