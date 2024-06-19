@@ -135,7 +135,6 @@ GameObject:
   - component: {fileID: 44817735}
   - component: {fileID: 44817738}
   - component: {fileID: 44817737}
-  - component: {fileID: 44817742}
   - component: {fileID: 44817741}
   - component: {fileID: 44817740}
   - component: {fileID: 44817739}
@@ -373,6 +372,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 8c8ce1c8-9328-4fa4-a23c-587118690427
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 44817740}
+        m_TargetAssemblyTypeName: P_Movement, Assembly-CSharp
+        m_MethodName: input_gliding
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: d6f7faf2-3ba6-455e-aa14-5e56fa048e86
+    m_ActionName: Player/New action
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -394,6 +409,7 @@ MonoBehaviour:
   ground_mask:
     serializedVersion: 2
     m_Bits: 64
+  _stamina: 0
   _velocity: {x: 0, y: 0}
 --- !u!114 &44817741
 MonoBehaviour:
@@ -407,27 +423,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33e8f0761c5af7844a8d64395aea3f7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  max_stamina: 100
+  stamina_loss: 0.5
+  stamina_gain: 1
   base_gravity: 6
   fall_gravity_multiplier: 1.1
   low_jump_gravity_multiplier: 3
-  max_speed: 14
-  acceleration: 120
+  can_glide: 1
+  max_fall_speed: 25
+  glide_max_fall_speed: 2
+  max_speed: 12
+  run_acceleration: 120
+  air_acceleration: 60
   run_deceleration: 60
   air_deceleration: 30
   jump_force: 25
   max_kabu: 1
---- !u!114 &44817742
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 44817734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed973660c62ae8a48aaa6832fe29d6d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

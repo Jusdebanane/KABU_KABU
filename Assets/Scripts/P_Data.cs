@@ -21,7 +21,8 @@ public class P_Data : MonoBehaviour
 
     [Header("HORIZONTAL MOVEMENT")]
     public float max_speed;
-    public float acceleration;
+    public float run_acceleration;
+    public float air_acceleration;
     public float run_deceleration;
     public float air_deceleration;
 
